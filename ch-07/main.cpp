@@ -43,19 +43,30 @@ struct UnsignedBigInteger
             throw std::runtime_error{"Overflow"};
     }
 
-    UnsignedBigInteger operator+(unsigned long long other)
+
+    UnsignedBigInteger operator+=(const unsigned long long other) const
     {
+        printf("Overloaded + operator w/ long long param\n");
+        /* convert long long to UnsignedBigInteger */
+        UnsignedBigInteger other_ubi{other};
+
+        /* call the + operator that takes an UnsignedBigInteger */
+        return *this + other_ubi;
+    }
+
+    UnsignedBigInteger operator+(const UnsignedBigInteger& other) const
+    {
+        /* TODO: need to check overflow */
+
+        printf("Overloaded + operator w/ UnsignedBigInteger param\n");
         uint8_t result[1024]{};
         size_t result_size{};
 
-        /* do digit-wise addition */
-        UnsignedBigInteger other_ubi{other};
-
         size_t i{}, j{};
         int carry{};
-        while(result_size < sizeof(result) && i < rep_length && j < other_ubi.rep_length)
+        while(result_size < sizeof(result) && i < rep_length && j < other.rep_length)
         {
-            auto val = rep[i++] + other_ubi.rep[j++] + carry;
+            auto val = rep[i++] + other.rep[j++] + carry;
             if(val > 10)
             {
                 val -= 10;
@@ -69,27 +80,35 @@ struct UnsignedBigInteger
         {
             result[result_size++] = rep[i++];
         }
-        while(j < other_ubi.rep_length)
+        while(j < other.rep_length)
         {
-            result[result_size++] = other_ubi.rep[j++];
+            result[result_size++] = other.rep[j++];
         }
         
         return UnsignedBigInteger{result, result_size};
     }
 
-    UnsignedBigInteger operator-(unsigned long long other)
+    UnsignedBigInteger operator-=(const unsigned long long other) const
     {
+        printf("Overloaded - operator w/ long long param\n");
+        UnsignedBigInteger other_ubi{other};
+        return *this - other_ubi;
+    }
+
+
+    UnsignedBigInteger operator-(const UnsignedBigInteger& other) const
+    {
+        /* TODO: need to check underflow */
+
+        printf("Overloaded - operator w/ UnsignedBigInteger param\n");
         uint8_t result[1024]{};
         size_t result_size{};
 
-        /* do digit-wise subtraction */
-        UnsignedBigInteger other_ubi{other};
-
         size_t i{}, j{};
         int carry{};
-        while(i < rep_length && j < other_ubi.rep_length)
+        while(i < rep_length && j < other.rep_length)
         {
-            auto val = rep[i++] - other_ubi.rep[j++] - carry;
+            auto val = rep[i++] - other.rep[j++] - carry;
             if(val < 0)
             {
                 val += 10;
@@ -123,15 +142,67 @@ struct UnsignedBigInteger
         return UnsignedBigInteger{result, result_size};
     }
 
+    operator int() const
+    {
+        printf("Overloaded int operator\n");
+        int ret{};
+        int mult = 1;
+        for(size_t i{}; i < rep_length && ret >= 0; i++)
+        {
+            ret += rep[i] * mult;
+            mult *= 10;
+        }
+        /* narrowing happens if int value overflows and produces a negative number */
+        if(ret < 0)
+            throw std::runtime_error{"Narrowing"};
+
+        return ret;
+    }
+
     uint8_t rep[1024];
     size_t rep_length;
 };
 
 int main(int argc, char** argv)
 {
-    UnsignedBigInteger a{std::numeric_limits<uint64_t>::max()};
-    UnsignedBigInteger x = a + (long)4566345343;
-    UnsignedBigInteger y = a - (long)4566345343;
+    const UnsignedBigInteger a{std::numeric_limits<uint64_t>::max()};
+    printf("-------\n");
+    
+    UnsignedBigInteger x1 = a + UnsignedBigInteger{98765498761321654};
+    printf("-------\n");
+    
+    UnsignedBigInteger x2{99999999};
+    x2 += 4567893;
+    printf("-------\n");
+
+    UnsignedBigInteger y1 = a - UnsignedBigInteger{98765498761321654};
+    printf("-------\n");
+    
+    UnsignedBigInteger y2{99999999};
+    y2 -= 4567893;
+    printf("-------\n");
+
+    /* cast large number to int (narrowing) */
+    try
+    {
+        printf("int(a) = %d\n", (int)a);
+    }
+    catch(std::runtime_error e)
+    {
+        printf("Exception! %s\n", e.what());
+    }
+    printf("-------\n");
+    
+    /* cast number to int (not narrowing) */
+    try
+    {
+        printf("int(p) = %d\n", (int)UnsignedBigInteger{123456});
+    }
+    catch(std::runtime_error e)
+    {
+        printf("Exception! %s\n", e.what());
+    }
+    printf("-------\n");
 
     return 0;
 }
