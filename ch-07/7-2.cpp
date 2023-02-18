@@ -82,7 +82,7 @@ void operator delete(void* p)
     return heap.free(p);
 }
 
-int main()
+int main(int argc, char** argv)
 {
     printf("Buckets:   %p\n", heap.buckets);
     auto breakfast = new unsigned int{ 0xC0FFEE };
