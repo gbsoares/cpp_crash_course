@@ -74,7 +74,8 @@ struct AutoBrake
         speed_mps{},
         speed_limit_mps{ 39 }
     {
-        bus.subscribe([this, &bus](const SpeedUpdate& update) { 
+        bus.subscribe([this, &bus](const SpeedUpdate& update)
+        { 
             speed_mps = update.velocity_mps;
         });
 
@@ -88,7 +89,8 @@ struct AutoBrake
             }
         });
 
-        bus.subscribe([this, &bus](const SpeedLimitDetected& update) { 
+        bus.subscribe([this, &bus](const SpeedLimitDetected& update)
+        { 
             speed_limit_mps = update.speed_mps;
             if(speed_mps > speed_limit_mps)
             {
