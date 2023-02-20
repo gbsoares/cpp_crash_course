@@ -1,6 +1,5 @@
-
-all: 
+all:
 	g++ -o main.out main.cc -I.
 
 clean:
-	rm ./*.out
+	rm ./*.out HAL9000
