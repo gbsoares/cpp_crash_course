@@ -1,4 +1,4 @@
-#include "FibonacciRange.hpp"
+#include "FibonacciRange.hh"
 
 FibonacciRange::FibonacciRange(int max) : 
     max { max } 

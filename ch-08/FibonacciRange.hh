@@ -1,7 +1,7 @@
 // #ifndef __FIBONACCIRANGE_H__
 // #define __FIBONACCIRANGE_H__
 
-#include "FibonacciIterator.hpp"
+#include "FibonacciIterator.hh"
 
 struct FibonacciRange
 {

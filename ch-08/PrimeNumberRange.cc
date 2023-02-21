@@ -1,4 +1,4 @@
-#include "PrimeNumberRange.hpp"
+#include "PrimeNumberRange.hh"
 
 PrimeNumberRange::PrimeNumberRange(int max) : 
     max { max } 

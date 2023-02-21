@@ -1,7 +1,7 @@
 #include <cstdio>
 
-#include "FibonacciRange.hpp"
-#include "PrimeNumberRange.hpp"
+#include "FibonacciRange.hh"
+#include "PrimeNumberRange.hh"
 
 int main (int argc, char** argv)
 {

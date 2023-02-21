@@ -1,4 +1,4 @@
-#include "FibonacciIterator.hpp"
+#include "FibonacciIterator.hh"
 
 bool FibonacciIterator::operator!=(int x) const
 {

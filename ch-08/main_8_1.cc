@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "FibonacciRange.hpp"
+#include "FibonacciRange.hh"
 
 int main (int argc, char** argv)
 {
