@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <regex>
+#include <cmath>
 
 /* list of supported operations */
 enum operations
@@ -54,7 +55,7 @@ T calculate(T x, T y, enum operations op)
         case operations::division:
             return x / y;
         case operations::modulo:
-            return x % y;
+            return std::fmod(x,y);
         default:
             return 0;
     }
@@ -77,8 +78,8 @@ int main(int argc, char **argv)
     std::string v2_str{};
 
     /* use regex to do exact matches of the string and determine the types of the operands */
-    std::regex regex_int{R"(\(?\s*(\d+)\s*\)?\s*([+-x/])\s*\(?\s*(\d+)\s*\)?)"};
-    std::regex regex_float{R"(\(?\s*(\d+\.\d+)\s*\)?\s*([+-x/])\s*\(?\s*(\d+\.\d+)\s*\)?)"};
+    std::regex regex_int{R"(\(?\s*(\d+)\s*\)?\s*([+-x/%])\s*\(?\s*(\d+)\s*\)?)"};
+    std::regex regex_float{R"(\(?\s*(\d+\.\d+)\s*\)?\s*([+-x/%])\s*\(?\s*(\d+\.\d+)\s*\)?)"};
     std::smatch results;
     bool is_float = false;
     if(!std::regex_match(input, results, regex_int))
