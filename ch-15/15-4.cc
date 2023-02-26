@@ -78,47 +78,29 @@ int main(int argc, char **argv)
     std::string v2_str{};
 
     /* use regex to do exact matches of the string and determine the types of the operands */
-    std::regex regex_int{R"(\(?\s*(\d+)\s*\)?\s*([+-x/%])\s*\(?\s*(\d+)\s*\)?)"};
-    std::regex regex_float{R"(\(?\s*(\d+\.\d+)\s*\)?\s*([+-x/%])\s*\(?\s*(\d+\.\d+)\s*\)?)"};
+    std::regex regex_all{R"(\(?\s*((?:\d+)(?:\.\d+)?)\s*\)?\s*([+-x/%])\s*\(?\s*((?:\d+)(?:\.\d+)?)\s*\)?)"};
     std::smatch results;
-    bool is_float = false;
-    if(!std::regex_match(input, results, regex_int))
+    if(std::regex_match(input, results, regex_all))
     {
-        if(std::regex_match(input, results, regex_float))
-            is_float = true;
-        else
-        {
-            printf("ERR: could not match any regex patterns\n");
-            error_exit();
-        }
+        v1_str = results[1].str();
+        op_str = results[2].str();
+        v2_str = results[3].str();
+    }
+    else
+    {
+        printf("ERR: could not match any regex patterns\n");
+        error_exit();
     }
 
     v1_str = results[1].str();
     op_str = results[2].str();
     v2_str = results[3].str();
 
-    printf("v1 = %s\n", v1_str.c_str());
-    printf("op = %s\n", op_str.c_str());
-    printf("v2 = %s\n", v2_str.c_str());
-
-    int val{}, i_val2{}, i_result{};
-    double d_val1{}, d_val2{}, d_result{};
     auto op = get_operator(op_str);
-
-    if(!is_float)
-    {
-        auto val1 = std::stoi(v1_str);
-        auto val2 = std::stoi(v2_str);
-        auto result = calculate(val1, val2, op);
-        printf("%d %s %d = %d\n", val1, op_str.c_str(), val2, result);
-    }
-    else
-    {
-        auto val1 = std::stod(v1_str);
-        auto val2 = std::stod(v2_str);
-        auto result = calculate(val1, val2, op);
-        printf("%lf %s %lf = %lf\n", val1, op_str.c_str(), val2, result);
-    }
+    auto x = std::stod(v1_str);
+    auto y = std::stod(v2_str);
+    auto result = calculate(x, y, op);
+    printf("%lf %s %lf = %lf\n", x, op_str.c_str(), y, result);
 
     return 0;
 }
