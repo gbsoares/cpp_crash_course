@@ -10,7 +10,8 @@ enum operations
     addition,
     subtraction,
     multiplication,
-    division
+    division,
+    modulo
 };
 
 void error_exit()
@@ -31,6 +32,8 @@ enum operations get_operator(std::string_view x)
         return operations::multiplication;
     case '/':
         return operations::division;
+    case '%':
+        return operations::modulo;
     default:
         error_exit();
         return operations::none;
@@ -50,6 +53,8 @@ T calculate(T x, T y, enum operations op)
             return x * y;
         case operations::division:
             return x / y;
+        case operations::modulo:
+            return x % y;
         default:
             return 0;
     }
