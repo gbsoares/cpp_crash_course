@@ -17,16 +17,20 @@ int main(int argc, char** argv)
         str += (index == argc - 1 ? "" : " "); 
     }
 
-    std::string res{"is"};
-    for(auto itr1 = str.begin(), itr2 = str.end()-1; itr1 < itr2; itr1++, itr2--)
+    size_t count{};
+    /* count the number of vowels in str */
+    for(auto c : str)
     {
-        if(*itr1 != *itr2)
+        if( c == 'a' || c == 'A' || 
+            c == 'e' || c == 'E' ||
+            c == 'i' || c == 'I' ||
+            c == 'o' || c == 'O' ||
+            c == 'u' || c == 'U' )
         {
-            res.append(" not");
-            break;
+            count++;
         }
     }
 
-    printf("'%s' %s a palindrome\n", str.c_str(), res.c_str());
+    printf("%ld vowels in '%s'\n", count, str.c_str());
     return 0;
 }
