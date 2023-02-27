@@ -8,7 +8,7 @@ all: 16-1 16-2
 	g++ -o 16-2.out 16-2.cc -I.
 
 16-4:
-	g++ -o 16-4.out 16-2.cc -I.
+	g++ -o 16-4.out 16-4.cc -I.
 
 clean:
 	rm ./*.out
